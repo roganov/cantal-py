@@ -1,8 +1,8 @@
-import time
 from contextlib import contextmanager
 
 from .counters import Counter
 from .levels import Integer
+from .clock import monotonic
 
 
 class RequestTracker(object):
@@ -18,7 +18,7 @@ class RequestTracker(object):
 
     @contextmanager
     def request(self):
-        start = time.time()
+        start = monotonic()
         self.in_progress.incr()
         try:
             yield
@@ -26,7 +26,7 @@ class RequestTracker(object):
             self.errors.incr()
             raise
         finally:
-            dur = time.time() - start
+            dur = monotonic() - start
             self.in_progress.decr()
             self.requests.incr()
             self.duration.incr(int(dur * 1000))

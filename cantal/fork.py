@@ -1,11 +1,10 @@
-import time
-import sys
 import logging
 import traceback
 from contextlib import contextmanager
 
 from .simple_state import State
 from .counters import Counter
+from .clock import monotonic
 
 
 log = logging.getLogger(__name__)
@@ -51,16 +50,16 @@ class Fork(object):
         try:
             yield
         finally:
-            ts = int(time.time()*1000)
+            ts = int(monotonic() * 1000)
             if self._branch is not None:
                 self._branch._commit(self._timestamp, ts)
             self._state.exit()
             self._branch = None
 
     def enter_branch(self, branch):
-        ts = int(time.time()*1000)
+        ts = int(monotonic() * 1000)
         if self._branch is not None:
             self._branch._commit(self._timestamp, ts)
-        self._state.enter(branch.name, _timestamp=ts)
+        self._state.enter(branch.name)
         self._timestamp = ts
         self._branch = branch

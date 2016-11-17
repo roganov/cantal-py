@@ -1,5 +1,4 @@
 import abc
-import sys
 import logging
 
 from . import collection as _collection
@@ -33,4 +32,8 @@ class _Value(object):
 
     @abc.abstractmethod
     def _get_size(self):
+        pass
+
+    @abc.abstractmethod
+    def _get_type(self):
         pass

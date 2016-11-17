@@ -65,8 +65,6 @@ class Collection(object):
                 _, typ = value._get_type()
                 scheme.append(typ + ': ' + name)
 
-        size = offset
-
         path = basepath + '.values'
         tmppath = basepath + '.tmp'
         metapath = basepath + '.meta'

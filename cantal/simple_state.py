@@ -32,11 +32,8 @@ class State(_Value):
     def _get_type(self):
         return ('B', 'state {}'.format(self.size + self.HEADER_SIZE))
 
-    def enter(self, value, _timestamp=None):
+    def enter(self, value):
         """Enter a state with a value
-
-        The _timestamp is a merely optimization, don't pass it in any user
-        code
         """
         encoded = value.encode('utf-8')
         le = len(encoded)
@@ -47,9 +44,8 @@ class State(_Value):
         elif tail > 0:
             encoded = encoded[:self.size]
         le += 8
-        if _timestamp is None:
-            _timestamp = int(time.time()*1000)
-        chunk = _timestr.pack(_timestamp) + encoded
+        timestamp = int(time.time()*1000)
+        chunk = _timestr.pack(timestamp) + encoded
         self._memoryview[0:le] = chunk
 
     @contextmanager
